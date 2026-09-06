@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Crop Procurement Portal - SIH26032</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.35s ease-out forwards',
+                        'slide-up': 'slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(12px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Modern Scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.5); }
+        
+        /* Glassmorphic Panel Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+        }
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col antialiased">
+
+    <div id="app" class="flex-grow flex flex-col">
+        
+        <!-- ========================================== -->
+        <!-- NAVIGATION BAR -->
+        <!-- ========================================== -->
+        <header class="sticky top-0 z-50 glass-panel border-b border-slate-200/50 dark:border-slate-800/50 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigate('landing')">
+                    <span class="text-2xl">🌊</span>
+                    <div>
+                        <h1 class="font-extrabold text-sm sm:text-base tracking-tight text-emerald-600 dark:text-emerald-400">SMART KHARID</h1>
+                        <p class="text-[9px] text-slate-400 dark:text-slate-500 font-bold tracking-widest uppercase">SIH PS32 CO-ENGINE</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Light / Dark Mode Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-slate-200/50 dark:hover:bg-slate-800/50 text-slate-600 dark:text-slate-300 transition-all duration-200" title="Toggle Theme">
+                        <svg id="theme-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                        </svg>
+                        <svg id="theme-moon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                    
+                    <div id="nav-session-block" class="hidden flex items-center space-x-3">
+                        <span id="nav-user-badge" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-200/60 dark:bg-slate-800 text-slate-700 dark:text-slate-300"></span>
+                        <button onclick="logout()" class="text-xs font-bold text-red-600 dark:text-red-400 hover:underline">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ========================================== -->
+        <!-- MAIN CONTENT ROUTER -->
+        <!-- ========================================== -->
+        <main class="flex-grow flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-7xl mx-auto w-full">
+
+                <!-- SCREEN 1: UNIVERSAL LANDING PAGE -->
+                <div id="screen-landing" class="animate-slide-up space-y-12 py-12">
+                    <div class="text-center max-w-2xl mx-auto space-y-4">
+                        <span class="px-3 py-1 text-[11px] font-bold tracking-widest uppercase text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-950/30 border border-emerald-500/15 rounded-full">Digital Public Infrastructure Platform</span>
+                        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight">Smart Crop Procurement</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                            An enterprise queue scheduling, predictive wait-time forecasting, and quality audit network mapped strictly to fixed government MSP parameters.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                        <!-- Farmer Card -->
+                        <div onclick="selectRole('farmer')" class="group p-8 rounded-2xl bg-white dark:bg-slate-900 border-t-4 border-emerald-500 border-x border-b border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
+                            <div class="space-y-4">
+                                <span class="text-5xl group-hover:scale-110 transform transition-transform duration-200 inline-block">🚜</span>
+                                <h3 class="text-xl font-bold tracking-tight group-hover:text-emerald-500 transition-colors">Farmer Workspace</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                                    Secure time-certain slot bookings, evaluate live mandi congestion metrics, and receive digital token receipts with active offline SMS backup support.
+                                </p>
+                            </div>
+                            <div class="mt-8 pt-4 flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 border-t border-slate-100 dark:border-slate-800/60">
+                                Enter Workspace <span class="ml-1.5 group-hover:translate-x-1.5 transition-transform duration-200">➔</span>
+                            </div>
+                        </div>
+
+                        <!-- Admin Card -->
+                        <div onclick="selectRole('admin')" class="group p-8 rounded-2xl bg-white dark:bg-slate-900 border-t-4 border-blue-500 border-x border-b border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer">
+                            <div class="space-y-4">
+                                <span class="text-5xl group-hover:scale-110 transform transition-transform duration-200 inline-block">🏢</span>
+                                <h3 class="text-xl font-bold tracking-tight group-hover:text-blue-500 transition-colors">Control Panel</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                                    Publish crop procurement parameters, inspect arrived cargo against FAQ moisture targets, check farmer reliability logs, and process Direct Benefit Payouts.
+                                </p>
+                            </div>
+                            <div class="mt-8 pt-4 flex items-center text-xs font-bold text-blue-600 dark:text-blue-400 border-t border-slate-100 dark:border-slate-800/60">
+                                Access Control <span class="ml-1.5 group-hover:translate-x-1.5 transition-transform duration-200">➔</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN 2: AUTHENTICATION (LOGIN/REGISTER) -->
+                <div id="screen-login" class="hidden animate-fade-in max-w-md mx-auto w-full">
+                    <button onclick="navigate('landing')" class="mb-6 flex items-center space-x-1.5 text-xs font-bold text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+                        <span>⬅</span> <span>Return to Portal Select</span>
+                    </button>
+
+                    <div class="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md space-y-6">
+                        <div class="text-center space-y-1.5">
+                            <span id="login-role-emoji" class="text-4xl"></span>
+                            <h3 id="login-title" class="text-xl font-extrabold tracking-tight">Secure Authorization</h3>
+                            <p id="login-subtitle" class="text-xs text-slate-500 dark:text-slate-400"></p>
+                        </div>
+
+                        <div id="farmer-tabs-container" class="hidden grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-850">
+                            <button onclick="setAuthTab('login')" id="tab-auth-login" class="py-2 text-[11px] font-bold rounded-lg transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-sm">🔐 OTP Sign In</button>
+                            <button onclick="setAuthTab('register')" id="tab-auth-register" class="py-2 text-[11px] font-bold rounded-lg transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">✍️ Register Account</button>
+                        </div>
+
+                        <div id="auth-fields" class="space-y-4">
+                            <div id="field-id-wrapper">
+                                <label id="label-user-id" class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80"></label>
+                                <input type="text" id="input-id" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all">
+                            </div>
+
+                            <div id="field-pass-wrapper">
+                                <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Security Password</label>
+                                <input type="password" id="input-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all">
+                            </div>
+
+                            <div id="field-admin-key-wrapper" class="hidden">
+                                <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Secure Unique Admin Key</label>
+                                <input type="text" id="input-admin-key" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all">
+                            </div>
+
+                            <!-- Registration Fields -->
+                            <div id="register-fields" class="hidden space-y-4 pt-2 border-t border-slate-100 dark:border-slate-850">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Full Name</label>
+                                    <input type="text" id="input-reg-name" placeholder="e.g. Baldev Singh" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Mobile Number</label>
+                                    <input type="text" id="input-reg-phone" placeholder="e.g. 9988776655" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Mandi District Location</label>
+                                    <input type="text" id="input-reg-loc" placeholder="e.g. Karnal, Haryana" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Primary Sown Crop</label>
+                                    <select id="input-reg-crop" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all">
+                                        <option value="Paddy (Basmati)">Paddy (Basmati)</option>
+                                        <option value="Wheat (Sharbati)">Wheat (Sharbati)</option>
+                                        <option value="Cotton">Cotton</option>
+                                    </select>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[10px] leading-relaxed text-emerald-700 dark:text-emerald-400">
+                                    🛡 <strong>AgriStack Land Record Mapping:</strong> Land ownership and sowed crop registries are automatically mapped via state land databases upon submission.
+                                </div>
+                            </div>
+
+                            <!-- OTP Simulator Field -->
+                            <div id="field-otp-wrapper" class="hidden p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-3">
+                                <p class="text-xs text-amber-700 dark:text-amber-400 leading-relaxed font-semibold">
+                                    🔐 OTP Sent! To verify your device, enter the simulation OTP code below:
+                                </p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold">OTP Code: <span class="bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded font-mono text-emerald-600 dark:text-emerald-400">8812</span></span>
+                                </div>
+                                <input type="text" id="input-otp" placeholder="Enter 4-Digit OTP" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-emerald-500 outline-none text-xs transition-all text-center tracking-widest font-mono">
+                            </div>
+
+                            <!-- Demo Credentials Banner -->
+                            <div id="demo-credentials-helper" class="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-850 text-[10px] space-y-1.5">
+                                <span class="font-bold text-slate-400 block uppercase tracking-wider text-[8px]">Judge Evaluation Credentials:</span>
+                                <div id="demo-farmer-creds" class="space-y-1">
+                                    <p>👨‍🌾 <strong>Farmer 1:</strong> ID <code>FMR8812</code> | Password <code>pass</code></p>
+                                    <p>👨‍🌾 <strong>Farmer 2:</strong> ID <code>FMR4012</code> | Password <code>pass</code></p>
+                                </div>
+                                <div id="demo-admin-creds" class="hidden space-y-1">
+                                    <p>👮 <strong>Admin ID:</strong> <code>ADMIN_SIH26</code></p>
+                                    <p>🔐 <strong>Password:</strong> <code>sih2026</code></p>
+                                    <p>🔑 <strong>Secure Key:</strong> <code>KEY-9921-X</code></p>
+                                </div>
+                            </div>
+
+                            <button id="btn-auth-submit" onclick="submitAuth()" class="w-full py-3.5 rounded-xl font-extrabold text-sm text-white bg-emerald-600 hover:bg-emerald-500 active:scale-[0.97] transition-all shadow-md hover:shadow-emerald-500/20">Submit</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN 3: FARMER DASHBOARD -->
+                <div id="screen-farmer-dashboard" class="hidden animate-fade-in space-y-8">
+                    <!-- Profile Stats Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm gap-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-3xl">🚜</div>
+                            <div>
+                                <h3 id="farmer-profile-name" class="text-lg font-extrabold"></h3>
+                                <p id="farmer-profile-id" class="text-xs text-slate-500 dark:text-slate-400 font-mono"></p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-3 px-4 rounded-xl bg-slate-100 dark:bg-slate-850 text-center border border-slate-200/50 dark:border-slate-800">
+                                <span class="text-[9px] uppercase font-bold tracking-wider opacity-60 block">Reliability Ledger</span>
+                                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">98.2% Accuracy</span>
+                            </div>
+                            <div class="p-3 px-4 rounded-xl bg-slate-100 dark:bg-slate-850 text-center border border-slate-200/50 dark:border-slate-800">
+                                <span class="text-[9px] uppercase font-bold tracking-wider opacity-60 block">Active Token</span>
+                                <span id="farmer-token-kpi" class="text-xs font-bold text-blue-500">None Active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs Menu -->
+                    <div class="border-b border-slate-200 dark:border-slate-800">
+                        <nav class="flex space-x-8 -mb-px overflow-x-auto">
+                            <button onclick="setDashboardTab('book')" id="tab-dash-book" class="pb-4 text-xs font-bold border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400 whitespace-nowrap">🔍 Browse & Book Slots</button>
+                            <button onclick="setDashboardTab('queue')" id="tab-dash-queue" class="pb-4 text-xs font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 whitespace-nowrap">📋 Anonymized Live Queue</button>
+                            <button onclick="setDashboardTab('my-bookings')" id="tab-dash-my-bookings" class="pb-4 text-xs font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 whitespace-nowrap">📂 Your Booked Slots</button>
+                            <button onclick="setDashboardTab('sms')" id="tab-dash-sms" class="pb-4 text-xs font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 whitespace-nowrap">📴 Offline SMS Simulator</button>
+                        </nav>
+                    </div>
+
+                    <!-- TAB CONTENT: BROWSE & BOOK -->
+                    <div id="content-dash-book" class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-base font-bold">Open Government Procurement Guidelines</h4>
+                            <span class="text-xs text-slate-400">All prices bound strictly to official Minimum Support Price (MSP) parameters</span>
+                        </div>
+                        <div id="buy-orders-container" class="space-y-6"></div>
+                    </div>
+
+                    <!-- TAB CONTENT: ANONYMIZED QUEUE -->
+                    <div id="content-dash-queue" class="hidden space-y-6">
+                        <div class="max-w-3xl space-y-1">
+                            <h4 class="text-base font-bold">Live Chronological Mandi Queue</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Public transaction board tracking booked arrivals. To protect farmer records and privacy, all credentials and land details are fully anonymized.
+                            </p>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-100 dark:bg-slate-850 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-200 dark:border-slate-800">
+                                        <th class="px-6 py-4">Secure Token ID</th>
+                                        <th class="px-6 py-4">Crop Type</th>
+                                        <th class="px-6 py-4">Weighment Target</th>
+                                        <th class="px-6 py-4">Arrival Window</th>
+                                        <th class="px-6 py-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="queue-table-body" class="divide-y divide-slate-100 dark:divide-slate-850"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TAB CONTENT: YOUR BOOKINGS -->
+                    <div id="content-dash-my-bookings" class="hidden space-y-6">
+                        <h4 class="text-base font-bold">Manage Your Reserved Gates</h4>
+                        <div id="my-bookings-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- TAB CONTENT: OFFLINE SMS SIMULATOR -->
+                    <div id="content-dash-sms" class="hidden max-w-2xl mx-auto p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg space-y-6">
+                        <div class="space-y-2">
+                            <h4 class="text-lg font-bold flex items-center space-x-2"><span>📴</span> <span>Zero-Connectivity SMS Scheduler</span></h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                Demonstrates how farmers in low-reception zones can reserve booking slots using legacy keypad phones via automated IVR/SMS command strings.
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Simulate SMS Input</label>
+                                <input type="text" id="sms-text-input" value="BOOK ORD001 2000 10:00AM" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-mono text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                                <span class="text-[10px] text-slate-500 dark:text-slate-400 block mt-1.5">Command Syntax: <code>BOOK [Order_ID] [Quantity_KG] [Estimated_Time]</code></span>
+                            </div>
+
+                            <button onclick="triggerSMS()" class="w-full py-3.5 rounded-xl font-extrabold text-xs text-white bg-slate-800 hover:bg-slate-700 active:scale-[0.97] transition-all">
+                                Trigger Inbound SMS Simulation
+                            </button>
+
+                            <div id="sms-response-wrapper" class="hidden animate-fade-in p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-2">
+                                <span class="text-[9px] uppercase font-bold tracking-widest text-emerald-600 dark:text-emerald-400 block">Outbound Automated Carrier Response:</span>
+                                <p id="sms-response-text" class="text-xs font-mono leading-relaxed text-slate-800 dark:text-slate-200"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN 4: ADMIN DASHBOARD -->
+                <div id="screen-admin-dashboard" class="hidden animate-fade-in space-y-8">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-3.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-3xl">👮</div>
+                            <div>
+                                <h3 class="text-lg font-bold">ADMIN CONTROL CENTRE</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-extrabold">Authorized Operations Session</p>
+                            </div>
+                        </div>
+                        <button onclick="logout()" class="px-5 py-2.5 rounded-xl text-xs font-bold border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/20 text-red-600 dark:text-red-400 transition-colors">
+                            Exit Session
+                        </button>
+                    </div>
+
+                    <!-- Admin Tabs -->
+                    <div class="border-b border-slate-200 dark:border-slate-800">
+                        <nav class="flex space-x-8 -mb-px">
+                            <button onclick="setAdminTab('publish')" id="tab-adm-publish" class="pb-4 text-xs font-bold border-b-2 border-blue-500 text-blue-600 dark:text-blue-400">🆕 Create Buy Order</button>
+                            <button onclick="setAdminTab('audit')" id="tab-adm-audit" class="pb-4 text-xs font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">⚖️ Mandi Cargo Audit</button>
+                            <button onclick="setAdminTab('ledger')" id="tab-adm-ledger" class="pb-4 text-xs font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">📊 System Ledgers</button>
+                        </nav>
+                    </div>
+
+                    <!-- ADMIN TAB: PUBLISH BUY ORDER -->
+                    <div id="content-adm-publish" class="grid md:grid-cols-2 gap-8 items-start">
+                        <!-- Form -->
+                        <div class="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md space-y-6">
+                            <h4 class="text-base font-bold">Publish Procurement Guidelines</h4>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Requested Crop Type</label>
+                                    <select id="adm-input-crop" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all">
+                                        <option value="Paddy (Common)">Paddy (Common)</option>
+                                        <option value="Wheat (Sharbati)">Wheat (Sharbati)</option>
+                                        <option value="Cotton">Cotton</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Target Aggregate Quantity (kg)</label>
+                                    <input type="number" id="adm-input-target" value="20000" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Mandi Collection Center Site</label>
+                                    <input type="text" id="adm-input-site" value="Karnal APMC Mandi, Haryana" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Allocated Operating Shift</label>
+                                    <select id="adm-input-shift" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all">
+                                        <option value="08:00 AM - 04:00 PM">08:00 AM - 04:00 PM</option>
+                                        <option value="08:00 AM - 06:00 PM">08:00 AM - 06:00 PM</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Official Locked MSP (₹ / Quintal)</label>
+                                    <input type="text" id="adm-input-msp" value="2441" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 text-slate-500 cursor-not-allowed text-sm">
+                                </div>
+
+                                <button onclick="publishOrder()" class="w-full py-3.5 rounded-xl font-extrabold text-xs text-white bg-blue-600 hover:bg-blue-500 active:scale-[0.97] transition-all shadow-md">
+                                    Publish Active Buy Order
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar AI Forecast Info -->
+                        <div class="space-y-6">
+                            <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
+                                <h4 class="text-xs font-extrabold tracking-widest uppercase text-slate-500 dark:text-slate-400 flex items-center space-x-2">
+                                    <span>📊</span> <span>Procurement Intelligence System</span>
+                                </h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                    Simulate and analyze real-time truck queue flow, meteorological warning maps, and regional APMC capacity indicators to guide center shifting scheduling.
+                                </p>
+                                <button onclick="runForecast()" class="px-4 py-2 text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700/60 rounded-xl transition-all">
+                                    Compute Local Traffic Forecast
+                                </button>
+                                <div id="forecast-output" class="hidden animate-fade-in p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs leading-relaxed space-y-2 text-slate-800 dark:text-slate-200">
+                                    <p class="font-bold">📊 Karnal District Operational Insight:</p>
+                                    <ul class="list-disc pl-4 space-y-1 font-mono text-[11px]">
+                                        <li>Expected Arrivals today: 14,200 kg</li>
+                                        <li>District capacity pressure: LOW</li>
+                                        <li>Weather alert indicators: CLEAN (Next 48H)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ADMIN TAB: CARGO INSPECTION -->
+                    <div id="content-adm-audit" class="hidden max-w-2xl space-y-6">
+                        <div class="space-y-1">
+                            <h4 class="text-base font-bold">Mandi Arrival Verification Audit</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">
+                                Record physical scales weighments, inspect moisture levels under the FAQ 12% barrier, and authorize DBT payment orders.
+                            </p>
+                        </div>
+
+                        <div class="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md space-y-6">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80">Select Arrived Truck Consignment</label>
+                                <select id="audit-consignment-select" onchange="loadAuditFarmerDetails()" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all"></select>
+                            </div>
+
+                            <!-- Selected Farmer Reliability Details (Strictly Private behind the scenes) -->
+                            <div id="audit-farmer-profile" class="p-4 rounded-xl bg-slate-100 dark:bg-slate-850 space-y-2 text-xs">
+                                <span class="font-bold text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500 block">🔒 Secure Internal Farmer Reliability History:</span>
+                                <p>Farmer Account ID: <strong id="audit-fid" class="font-mono"></strong></p>
+                                <p>Successful Mandi Trips: <strong id="audit-completions" class="text-emerald-600"></strong> | Cancellations recorded: <strong id="audit-cancels" class="text-amber-500"></strong> | Total bookings: <strong id="audit-bookings"></strong></p>
+                                <p>Past Weighed Variance: <strong id="audit-variance"></strong></p>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-80">FAQ Moisture Content Check (%)</label>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="range" id="audit-moisture" min="5" max="20" step="0.5" value="11" oninput="document.getElementById('moisture-val').innerText = this.value + '%'" class="w-full accent-blue-600">
+                                        <span id="moisture-val" class="text-sm font-bold font-mono">11%</span>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 block">Strict FCI Procurement Limit: Maximum 12% moisture.</span>
+                                </div>
+                                <div class="space-y-4">
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider opacity-80">Bridge Scale Weighment Value (kg)</label>
+                                    <input type="number" id="audit-actual-weight" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all">
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-3 py-2 border-t border-slate-100 dark:border-slate-850">
+                                <input type="checkbox" id="audit-faq-checklist" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300">
+                                <label for="audit-faq-checklist" class="text-xs font-semibold text-slate-700 dark:text-slate-300">Consignment meets FAQ (Fair Average Quality) structural standards.</label>
+                            </div>
+
+                            <button onclick="submitAudit()" class="w-full py-3.5 rounded-xl font-extrabold text-xs text-white bg-blue-600 hover:bg-blue-500 active:scale-[0.97] transition-all">
+                                Complete Inspection & Approve DBT Payout Request
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ADMIN TAB: LEDGERS & KPI -->
+                    <div id="content-adm-ledger" class="space-y-6">
+                        <div class="grid grid-cols-3 gap-6">
+                            <div class="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-center shadow-sm">
+                                <span class="text-[9px] uppercase font-bold tracking-wider opacity-60 block mb-1">Mandi Active Orders</span>
+                                <span id="ledger-orders-count" class="text-3xl font-black">2</span>
+                            </div>
+                            <div class="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-center shadow-sm">
+                                <span class="text-[9px] uppercase font-bold tracking-wider opacity-60 block mb-1">Active Scheduled Slots</span>
+                                <span id="ledger-slots-count" class="text-3xl font-black text-blue-500">2</span>
+                            </div>
+                            <div class="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-center shadow-sm">
+                                <span class="text-[9px] uppercase font-bold tracking-wider opacity-60 block mb-1">DBT Approved Runs</span>
+                                <span id="ledger-completed-count" class="text-3xl font-black text-emerald-500">0</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-2xl border border-blue-500/15 bg-blue-500/5 text-xs leading-relaxed space-y-2">
+                            <h5 class="font-bold text-sm text-blue-600 dark:text-blue-400">⚡ Real-Time High-Concurrency Scaling Blueprint</h5>
+                            <p class="text-slate-600 dark:text-slate-300">
+                                To protect core transactional databases (PostgreSQL) from bottleneck crashes during peak season traffic, booking slot states are mapped to an in-memory <strong>Redis distributed cache database</strong>. Client updates are powered by lightweight <strong>Server-Sent Events / WebSockets</strong>, cutting out heavy polling loops.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer class="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 py-6 text-center text-xs text-slate-400">
+            <p>Powered by Digital Public Infrastructure Frameworks • Department of Food & Public Distribution</p>
+        </footer>
+    </div>
+
+    <!-- MAIN INTERACTIVE STATE SCRIPT (ELITE FRONTEND ENGINE) -->
+    <script>
+        let appState = {
+            view: 'landing', 
+            role: null, 
+            authTab: 'login', 
+            dashboardTab: 'book', 
+            adminTab: 'publish', 
+            theme: 'light',
+            logged_in_farmer: null,
+            admin_logged_in: false,
+            
+            buy_orders: [
+                {
+                    id: 'ORD001',
+                    crop: 'Paddy (Common)',
+                    target: 15000,
+                    msp_price: 2441,
+                    location: 'Karnal APMC Mandi, Haryana',
+                    time_slot: '08:00 AM - 04:00 PM',
+                    distance_km: 14.2,
+                    expected_arrivals: '12,500 kg',
+                    congestion_forecast: 'MEDIUM'
+                },
+                {
+                    id: 'ORD002',
+                    crop: 'Wheat (Sharbati)',
+                    target: 25000,
+                    msp_price: 2425,
+                    location: 'Indore APMC Mandi, Madhya Pradesh',
+                    time_slot: '08:00 AM - 06:00 PM',
+                    distance_km: 38.5,
+                    expected_arrivals: '22,000 kg',
+                    congestion_forecast: 'LOW'
+                }
+            ],
+            
+            bookings: [
+                {
+                    id: 'BOK901',
+                    token_id: 'TK-8812',
+                    order_id: 'ORD001',
+                    farmer_name: 'Sukhdev Singh',
+                    farmer_id: 'FMR8812',
+                    qty: 4000,
+                    time: '09:30 AM',
+                    status: 'Confirmed'
+                },
+                {
+                    id: 'BOK902',
+                    token_id: 'TK-4012',
+                    order_id: 'ORD001',
+                    farmer_name: 'Ramesh Patidar',
+                    farmer_id: 'FMR4012',
+                    qty: 3500,
+                    time: '11:00 AM',
+                    status: 'Confirmed'
+                }
+            ],
+            
+            farmers_db: {
+                'FMR8812': {
+                    name: 'Sukhdev Singh',
+                    password: 'pass',
+                    phone: '9876543210',
+                    bookings_made: 18,
+                    completions: 17,
+                    cancellations: 1,
+                    no_shows: 0,
+                    weight_variance: '1.2%'
+                },
+                'FMR4012': {
+                    name: 'Ramesh Patidar',
+                    password: 'pass',
+                    phone: '9441234567',
+                    bookings_made: 10,
+                    completions: 8,
+                    cancellations: 1,
+                    no_shows: 1,
+                    weight_variance: '2.8%'
+                }
+            }
+        };
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            appState.theme = 'dark';
+            document.getElementById('theme-sun').classList.remove('hidden');
+            document.getElementById('theme-moon').classList.add('hidden');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                appState.theme = 'light';
+                document.getElementById('theme-sun').classList.add('hidden');
+                document.getElementById('theme-moon').classList.remove('hidden');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                appState.theme = 'dark';
+                document.getElementById('theme-sun').classList.remove('hidden');
+                document.getElementById('theme-moon').classList.add('hidden');
+            }
+        }
+
+        function navigate(viewName) {
+            appState.view = viewName;
+            document.getElementById('screen-landing').classList.add('hidden');
+            document.getElementById('screen-login').classList.add('hidden');
+            document.getElementById('screen-farmer-dashboard').classList.add('hidden');
+            document.getElementById('screen-admin-dashboard').classList.add('hidden');
+            document.getElementById('nav-session-block').classList.add('hidden');
+
+            if (viewName === 'landing') {
+                document.getElementById('screen-landing').classList.remove('hidden');
+                appState.role = null;
+            } else if (viewName === 'login') {
+                document.getElementById('screen-login').classList.remove('hidden');
+                setupLoginScreen();
+            } else if (viewName === 'farmer-dashboard') {
+                document.getElementById('screen-farmer-dashboard').classList.remove('hidden');
+                document.getElementById('nav-session-block').classList.remove('hidden');
+                const farmer = appState.farmers_db[appState.logged_in_farmer];
+                document.getElementById('nav-user-badge').innerText = `👨‍🌾 ${farmer.name}`;
+                document.getElementById('farmer-profile-name').innerText = farmer.name;
+                document.getElementById('farmer-profile-id').innerText = `Farmer ID: ${appState.logged_in_farmer}`;
+                setDashboardTab('book');
+                renderBuyOrders();
+                renderAnonymizedQueue();
+                updateFarmerTokenKPI();
+            } else if (viewName === 'admin-dashboard') {
+                document.getElementById('screen-admin-dashboard').classList.remove('hidden');
+                document.getElementById('nav-session-block').classList.remove('hidden');
+                document.getElementById('nav-user-badge').innerText = `👮 Controller (Admin)`;
+                setAdminTab('publish');
+                loadAuditFarmerDetails();
+                updateLedgerKPIs();
+            }
+        }
+
+        function selectRole(roleName) {
+            appState.role = roleName;
+            appState.authTab = 'login';
+            navigate('login');
+        }
+
+        function setAuthTab(tabType) {
+            appState.authTab = tabType;
+            const loginTab = document.getElementById('tab-auth-login');
+            const regTab = document.getElementById('tab-auth-register');
+            const regFields = document.getElementById('register-fields');
+            const loginFields = document.getElementById('field-id-wrapper');
+            const passFields = document.getElementById('field-pass-wrapper');
+            const submitBtn = document.getElementById('btn-auth-submit');
+
+            if (tabType === 'login') {
+                loginTab.className = "py-2 text-[11px] font-bold rounded-lg transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-sm";
+                regTab.className = "py-2 text-[11px] font-bold rounded-lg transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
+                regFields.classList.add('hidden');
+                loginFields.classList.remove('hidden');
+                passFields.classList.remove('hidden');
+                submitBtn.innerText = "Request OTP Secure Login";
+            } else {
+                regTab.className = "py-2 text-[11px] font-bold rounded-lg transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-sm";
+                loginTab.className = "py-2 text-[11px] font-bold rounded-lg transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
+                regFields.classList.remove('hidden');
+                loginFields.classList.add('hidden');
+                passFields.classList.add('hidden');
+                submitBtn.innerText = "Verify Identity via AgriStack";
+            }
+        }
+
+        function setupLoginScreen() {
+            const labelId = document.getElementById('label-user-id');
+            const adminKeyWrapper = document.getElementById('field-admin-key-wrapper');
+            const submitBtn = document.getElementById('btn-auth-submit');
+            const farmerTabs = document.getElementById('farmer-tabs-container');
+            const loginTitle = document.getElementById('login-title');
+            const loginSubtitle = document.getElementById('login-subtitle');
+            const demoFarmer = document.getElementById('demo-farmer-creds');
+            const demoAdmin = document.getElementById('demo-admin-creds');
+            const otpWrapper = document.getElementById('field-otp-wrapper');
+
+            otpWrapper.classList.add('hidden');
+            document.getElementById('input-otp').value = "";
+
+            if (appState.role === 'farmer') {
+                document.getElementById('login-role-emoji').innerText = "🌾";
+                loginTitle.innerText = "FARMER SYSTEM ACCESS";
+                loginSubtitle.innerText = "Login utilizing OTP and registered credentials";
+                labelId.innerText = "Farmer Registered Login ID";
+                adminKeyWrapper.classList.add('hidden');
+                farmerTabs.classList.remove('hidden');
+                demoFarmer.classList.remove('hidden');
+                demoAdmin.classList.add('hidden');
+                setAuthTab('login');
+            } else {
+                document.getElementById('login-role-emoji').innerText = "🏢";
+                loginTitle.innerText = "CONTROL CENTER PORTAL";
+                loginSubtitle.innerText = "Triple-Factor Identity Authorization Portal";
+                labelId.innerText = "Administrator Username";
+                adminKeyWrapper.classList.remove('hidden');
+                farmerTabs.classList.add('hidden');
+                demoFarmer.classList.add('hidden');
+                demoAdmin.classList.remove('hidden');
+                document.getElementById('register-fields').classList.add('hidden');
+                document.getElementById('field-id-wrapper').classList.remove('hidden');
+                document.getElementById('field-pass-wrapper').classList.remove('hidden');
+                submitBtn.innerText = "Initiate Secure Admin Session";
+            }
+        }
+
+        function setDashboardTab(tabId) {
+            appState.dashboardTab = tabId;
+            const tabs = ['book', 'queue', 'my-bookings', 'sms'];
+            tabs.forEach(t => {
+                const tabBtn = document.getElementById(`tab-dash-${t}`);
+                const contentDiv = document.getElementById(`content-dash-${t}`);
+                if (t === tabId) {
+                    tabBtn.className = "pb-4 text-xs font-bold border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400 whitespace-nowrap";
+                    contentDiv.classList.remove('hidden');
+                } else {
+                    tabBtn.className = "pb-4 text-xs font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 whitespace-nowrap";
+                    contentDiv.classList.add('hidden');
+                }
+            });
+            if (tabId === 'queue') renderAnonymizedQueue();
+            if (tabId === 'my-bookings') renderMyBookings();
+        }
+
+        function setAdminTab(tabId) {
+            appState.adminTab = tabId;
+            const tabs = ['publish', 'audit', 'ledger'];
+            tabs.forEach(t => {
+                const tabBtn = document.getElementById(`tab-adm-${t}`);
+                const contentDiv = document.getElementById(`content-adm-${t}`);
+                if (t === tabId) {
+                    tabBtn.className = "pb-4 text-xs font-bold border-b-2 border-blue-500 text-blue-600 dark:text-blue-400";
+                    contentDiv.classList.remove('hidden');
+                } else {
+                    tabBtn.className = "pb-4 text-xs font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200";
+                    contentDiv.classList.add('hidden');
+                }
+            });
+            if (tabId === 'audit') loadAuditFarmerDetails();
+            if (tabId === 'ledger') updateLedgerKPIs();
+        }
+
+        function renderBuyOrders() {
+            const container = document.getElementById('buy-orders-container');
+            container.innerHTML = "";
+            
+            appState.buy_orders.forEach(order => {
+                const orderBookings = appState.bookings.filter(b => b.order_id === order.id && b.status === 'Confirmed');
+                const totalBooked = orderBookings.reduce((sum, b) => sum + b.qty, 0);
+                const remainingCap = Math.max(0, order.target - totalBooked);
+                const isFull = remainingCap === 0;
+                const progressPercent = Math.min(100, (totalBooked / order.target) * 100);
+
+                let actionUI = "";
+                if (!isFull) {
+                    actionUI = `
+                        <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                            <details class="group">
+                                <summary class="flex justify-between items-center font-bold text-[10px] text-slate-400 cursor-pointer list-none">
+                                    <span>✍️ SCHEDULE DELIVERY SLOT</span>
+                                    <span class="transition-transform group-open:rotate-180">▼</span>
+                                </summary>
+                                <div class="grid sm:grid-cols-2 gap-4 mt-4 pt-2">
+                                    <div>
+                                        <label class="block text-[9px] font-bold tracking-wider uppercase mb-1 opacity-70">Quantity to Sell (kg)</label>
+                                        <input type="number" id="book-qty-${order.id}" min="100" max="${remainingCap}" value="${remainingCap}" oninput="calcPaycheckEstimate('${order.id}', ${order.msp_price})" class="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[9px] font-bold tracking-wider uppercase mb-1 opacity-70">Arrival Window Hour</label>
+                                        <select id="book-hour-${order.id}" class="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 outline-none">
+                                            <option value="09:00 AM">09:00 AM</option>
+                                            <option value="11:30 AM">11:30 AM</option>
+                                            <option value="01:30 PM">01:30 PM</option>
+                                            <option value="03:00 PM">03:00 PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between mt-4 p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-xl">
+                                    <div class="text-[10px] leading-relaxed">
+                                        <span class="font-bold text-slate-400 block uppercase">Estimated Paycheck:</span>
+                                        <span id="payout-est-${order.id}" class="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">₹${(remainingCap / 100 * order.msp_price).toLocaleString()}</span>
+                                    </div>
+                                    <button onclick="bookSlot('${order.id}')" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-bold text-xs text-white transition-all shadow-md">
+                                        Confirm Slot Book Token
+                                    </button>
+                                </div>
+                            </details>
+                        </div>
+                    `;
+                } else {
+                    actionUI = `
+                        <div class="mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-center text-xs text-red-600 dark:text-red-400 font-semibold">
+                            🔒 ORDER TARGET MET — QUEUE LOCKED
+                        </div>
+                    `;
+                }
+
+                const cardHtml = `
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-slate-400 font-mono">ORDER ID: ${order.id}</span>
+                            <span class="status-badge text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${isFull ? 'bg-red-500/10 border border-red-500/20 text-red-600' : 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-600'}">
+                                ${isFull ? 'Queue Completed' : 'Active Open'}
+                            </span>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-3 gap-6 items-center">
+                            <div class="space-y-1">
+                                <h5 class="text-lg font-extrabold flex items-center space-x-2">
+                                    <span>🌾</span> <span>${order.crop}</span>
+                                </h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">📍 Location: <strong>${order.location}</strong></p>
+                                <p class="text-[11px] text-slate-400">⏱ Shift Hours: ${order.time_slot} | 📏 Distance: <strong>${order.distance_km} km</strong></p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="opacity-70">Quota Progress:</span>
+                                    <span class="text-emerald-600 dark:text-emerald-400">${totalBooked.toLocaleString()} / ${order.target.toLocaleString()} kg</span>
+                                </div>
+                                <div class="w-full bg-slate-100 dark:bg-slate-850 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: ${progressPercent}%"></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] text-slate-400 font-semibold uppercase">
+                                    <span>Fixed MSP: ₹${order.msp_price} / Qtl</span>
+                                    <span>${remainingCap.toLocaleString()} kg remaining</span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-850 border border-slate-200/50 dark:border-slate-800 space-y-1">
+                                <span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">AI Congestion Gauge</span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 rounded-full ${order.congestion_forecast === 'LOW' ? 'bg-emerald-500' : 'bg-amber-500'}"></span>
+                                    <span class="text-xs font-extrabold">${order.congestion_forecast} TRAFFIC</span>
+                                </div>
+                                <p class="text-[10px] opacity-75">Estimated Wait: <strong>${order.congestion_forecast === 'LOW' ? '15 mins' : '35 mins'}</strong></p>
+                            </div>
+                        </div>
+
+                        ${actionUI}
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        function calcPaycheckEstimate(orderId, msp) {
+            const inputVal = document.getElementById(`book-qty-${orderId}`).value || 0;
+            const paycheck = (parseFloat(inputVal) / 100) * msp;
+            document.getElementById(`payout-est-${orderId}`).innerText = `₹${Math.round(paycheck).toLocaleString()}`;
+        }
+
+        function renderAnonymizedQueue() {
+            const body = document.getElementById('queue-table-body');
+            body.innerHTML = "";
+            appState.bookings.forEach(b => {
+                const order = appState.buy_orders.find(o => o.id === b.order_id);
+                const row = `
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-850/40 transition-colors">
+                        <td class="px-6 py-4 font-mono font-bold text-xs text-blue-500">Token #${b.token_id}</td>
+                        <td class="px-6 py-4 font-extrabold">${order.crop}</td>
+                        <td class="px-6 py-4 font-semibold">${b.qty.toLocaleString()} kg</td>
+                        <td class="px-6 py-4 font-medium text-slate-500 dark:text-slate-400">${b.time}</td>
+                        <td class="px-6 py-4">
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${b.status === 'Confirmed' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-600' : b.status === 'Cancelled' ? 'bg-red-500/10 border border-red-500/20 text-red-600' : 'bg-blue-500/10 border border-blue-500/20 text-blue-600'}">
+                                ${b.status}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+                body.innerHTML += row;
+            });
+        }
+
+        function renderMyBookings() {
+            const container = document.getElementById('my-bookings-container');
+            container.innerHTML = "";
+            const myList = appState.bookings.filter(b => b.farmer_id === appState.logged_in_farmer);
+
+            if (myList.length === 0) {
+                container.innerHTML = `
+                    <div class="p-6 text-center text-xs text-slate-500 dark:text-slate-400 font-bold border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+                        You have no active slot tokens registered.
+                    </div>
+                `;
+                return;
+            }
+
+            myList.forEach(b => {
+                const order = appState.buy_orders.find(o => o.id === b.order_id);
+                let actions = "";
+                if (b.status === 'Confirmed') {
+                    actions = `
+                        <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
+                            <input type="text" id="cancel-reason-${b.id}" placeholder="Specify Cancellation Reason (Mandatory)" class="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 outline-none">
+                            <button onclick="cancelSlot('${b.id}')" class="px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-lg whitespace-nowrap shadow-sm">
+                                Cancel & Release Slot
+                            </button>
+                        </div>
+                    `;
+                }
+
+                const card = `
+                    <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-extrabold text-blue-500 font-mono">TOKEN: ${b.token_id}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-600">${b.status}</span>
+                        </div>
+                        <h5 class="text-base font-extrabold">🌾 ${order.crop}</h5>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">⏱ Window Slot: <strong>${b.time}</strong> | Weighing: <strong>${b.qty.toLocaleString()} kg</strong></p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">📍 Drop-off Point: ${order.location}</p>
+                        ${actions}
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        function submitAuth() {
+            const f_id = document.getElementById('input-id').value;
+            const f_pwd = document.getElementById('input-password').value;
+
+            if (appState.role === 'farmer') {
+                if (appState.authTab === 'login') {
+                    const farmer = appState.farmers_db[f_id];
+                    if (farmer && farmer.password === f_pwd) {
+                        const otpWrapper = document.getElementById('field-otp-wrapper');
+                        if (otpWrapper.classList.contains('hidden')) {
+                            otpWrapper.classList.remove('hidden');
+                        } else {
+                            const otpVal = document.getElementById('input-otp').value;
+                            if (otpVal === "8812") {
+                                appState.logged_in_farmer = f_id;
+                                navigate('farmer-dashboard');
+                            } else {
+                                alert("🔒 OTP Verification Failure. Please input 8812.");
+                            }
+                        }
+                    } else {
+                        alert("❌ Credentials mismatch. Please try FMR8812 / pass.");
+                    }
+                } else {
+                    const regName = document.getElementById('input-reg-name').value;
+                    const regPhone = document.getElementById('input-reg-phone').value;
+                    const regLoc = document.getElementById('input-reg-loc').value;
+                    const regCrop = document.getElementById('input-reg-crop').value;
+
+                    if (regName && regPhone) {
+                        const newFmrId = `FMR${Math.floor(1000 + Math.random() * 9000)}`;
+                        appState.farmers_db[newFmrId] = {
+                            name: regName,
+                            password: 'pass',
+                            phone: regPhone,
+                            bookings_made: 0,
+                            completions: 0,
+                            cancellations: 0,
+                            no_shows: 0,
+                            weight_variance: '0.0%'
+                        };
+                        alert(`🤝 AgriStack Identity Match Verified!\n\nCredentials Generated:\nID: ${newFmrId}\nPassword: pass`);
+                        setAuthTab('login');
+                        document.getElementById('input-id').value = newFmrId;
+                        document.getElementById('input-password').value = 'pass';
+                    } else {
+                        alert("❌ Registration requires name and phone parameters.");
+                    }
+                }
+            } else {
+                const admKey = document.getElementById('input-admin-key').value;
+                if (f_id === "ADMIN_SIH26" && f_pwd === "sih2026" && admKey === "KEY-9921-X") {
+                    appState.admin_logged_in = true;
+                    navigate('admin-dashboard');
+                } else {
+                    alert("❌ Admin clearance failure. Review judge credentials helper.");
+                }
+            }
+        }
+
+        function logout() {
+            appState.logged_in_farmer = null;
+            appState.admin_logged_in = false;
+            navigate('landing');
+        }
+
+        function bookSlot(orderId) {
+            const qty = parseInt(document.getElementById(`book-qty-${orderId}`).value);
+            const hour = document.getElementById(`book-hour-${orderId}`).value;
+            const farmer = appState.farmers_db[appState.logged_in_farmer];
+
+            const newB = {
+                id: `BOK${Math.floor(100 + Math.random() * 900)}`,
+                token_id: `TK-${Math.floor(1000 + Math.random() * 9000)}`,
+                order_id: orderId,
+                farmer_name: farmer.name,
+                farmer_id: appState.logged_in_farmer,
+                qty: qty,
+                time: hour,
+                status: 'Confirmed'
+            };
+
+            appState.bookings.push(newB);
+            alert(`Token Allocated Successfully! ID: ${newB.token_id}`);
+            renderBuyOrders();
+            updateFarmerTokenKPI();
+        }
+
+        function cancelSlot(bookingId) {
+            const reason = document.getElementById(`cancel-reason-${bookingId}`).value;
+            if (!reason) {
+                alert("❌ Cancellation requires specifying a valid logistical reason.");
+                return;
+            }
+
+            const booking = appState.bookings.find(b => b.id === bookingId);
+            booking.status = 'Cancelled';
+            appState.farmers_db[booking.farmer_id].cancellations += 1;
+
+            alert(`🚨 Capacity Released! Slot ${booking.token_id} removed. Processing alerts to eligible nearby farmers within district.`);
+            renderMyBookings();
+            updateFarmerTokenKPI();
+        }
+
+        function triggerSMS() {
+            const smsText = document.getElementById('sms-text-input').value;
+            const wrapper = document.getElementById('sms-response-wrapper');
+            const respText = document.getElementById('sms-response-text');
+
+            if (smsText.toUpperCase().startsWith("BOOK")) {
+                const parts = smsText.split(" ");
+                if (parts.length >= 4) {
+                    const orderId = parts[1];
+                    const qty = parts[2];
+                    const hour = parts[3];
+                    wrapper.classList.remove('hidden');
+                    respText.innerText = `✔ CONFIRMED: Token ID: TK-SMS${Math.floor(100 + Math.random() * 900)} issued for Crop dropoff of ${qty} kg at Mandi Yard. Show this text block at physical entry gate. Status: OK.`;
+                } else {
+                    alert("❌ Invalid SMS parameter count. Format: BOOK [Order_ID] [QTY] [Time]");
+                }
+            } else {
+                alert("❌ Command unrecognized. Format starts with 'BOOK'.");
+            }
+        }
+
+        function runForecast() {
+            document.getElementById('forecast-output').classList.remove('hidden');
+        }
+
+        function publishOrder() {
+            const crop = document.getElementById('adm-input-crop').value;
+            const target = parseInt(document.getElementById('adm-input-target').value);
+            const site = document.getElementById('adm-input-site').value;
+            const shift = document.getElementById('adm-input-shift').value;
+            const msp = parseInt(document.getElementById('adm-input-msp').value);
+
+            const newId = `ORD00${appState.buy_orders.length + 1}`;
+            appState.buy_orders.push({
+                id: newId,
+                crop: crop,
+                target: target,
+                msp_price: msp,
+                location: site,
+                time_slot: shift,
+                distance_km: Math.round(5 + Math.random() * 45),
+                expected_arrivals: `${Math.round(target * 0.85)} kg`,
+                congestion_forecast: 'LOW'
+            });
+
+            alert(`Order ${newId} Published Successfully onto public live board!`);
+            navigate('admin-dashboard');
+        }
+
+        function loadAuditFarmerDetails() {
+            const select = document.getElementById('audit-consignment-select');
+            select.innerHTML = "";
+            
+            const confirmedBookings = appState.bookings.filter(b => b.status === 'Confirmed');
+            if (confirmedBookings.length === 0) {
+                document.getElementById('audit-farmer-profile').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('audit-farmer-profile').classList.remove('hidden');
+
+            confirmedBookings.forEach(b => {
+                const order = appState.buy_orders.find(o => o.id === b.order_id);
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.innerText = `${b.token_id} - ${b.farmer_name} (${b.qty} kg of ${order.crop})`;
+                select.appendChild(opt);
+            });
+
+            loadAuditFarmerDetailsData();
+        }
+
+        function loadAuditFarmerDetailsData() {
+            const bid = document.getElementById('audit-consignment-select').value;
+            const booking = appState.bookings.find(b => b.id === bid);
+            const farmer = appState.farmers_db[booking.farmer_id];
+
+            document.getElementById('audit-fid').innerText = booking.farmer_id;
+            document.getElementById('audit-completions').innerText = farmer.completions;
+            document.getElementById('audit-cancels').innerText = farmer.cancellations;
+            document.getElementById('audit-bookings').innerText = farmer.bookings_made;
+            document.getElementById('audit-variance').innerText = farmer.weight_variance;
+            document.getElementById('audit-actual-weight').value = booking.qty;
+        }
+
+        function submitAudit() {
+            const bid = document.getElementById('audit-consignment-select').value;
+            const moisture = parseFloat(document.getElementById('audit-moisture').value);
+            const isFaq = document.getElementById('audit-faq-checklist').checked;
+
+            if (moisture > 12.0) {
+                alert("❌ MOISTURE EXCEEDS FAQ AUTHORIZED TARGET (Max 12%). Crop requires sun drying.");
+                return;
+            }
+            if (!isFaq) {
+                alert("❌ Consignment fails physical FAQ checklist inspection standards.");
+                return;
+            }
+
+            const booking = appState.bookings.find(b => b.id === bid);
+            booking.status = 'Completed & Audited';
+            appState.farmers_db[booking.farmer_id].completions += 1;
+            appState.farmers_db[booking.farmer_id].bookings_made += 1;
+
+            alert("✔ Verification Complete! Payout DBT Transfer request successfully dispatched to linked bank account.");
+            navigate('admin-dashboard');
+        }
+
+        function updateFarmerTokenKPI() {
+            const myList = appState.bookings.filter(b => b.farmer_id === appState.logged_in_farmer && b.status === 'Confirmed');
+            const kpi = document.getElementById('farmer-token-kpi');
+            if (myList.length > 0) {
+                kpi.innerText = myList[0].token_id;
+                kpi.className = "text-xs font-bold text-emerald-600 dark:text-emerald-400";
+            } else {
+                kpi.innerText = "None Active";
+                kpi.className = "text-xs font-bold text-slate-500";
+            }
+        }
+
+        function updateLedgerKPIs() {
+            document.getElementById('ledger-orders-count').innerText = appState.buy_orders.length;
+            document.getElementById('ledger-slots-count').innerText = appState.bookings.filter(b => b.status === 'Confirmed').length;
+            document.getElementById('ledger-completed-count').innerText = appState.bookings.filter(b => b.status.includes('Completed')).length;
+        }
+    </script>
+</body>
+</html>
