@@ -1,2 +1,2 @@
-well uh idk why u even bothered coming to this repo , but good that you're here . 
+this repo contains versions 1 through 9 of the smart procurement web app
 
